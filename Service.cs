@@ -175,7 +175,7 @@ namespace Cliver.RamMonitor
                     //if (matches.Count > 0)
                     {
                         Log.Main.Write("MATCHES:\r\n" + SerializationRoutines.Json.Serialize(matches));
-                        post(new { Process = process_name, Regex = DumpRegex, Encoding = new { Name = Encoding.EncodingName, CodePage = Encoding.CodePage }, Matches = matches });
+                        post(new { Process = process_name, Regex = DumpRegex/*, Encoding = new { Name = Encoding.EncodingName, CodePage = Encoding.CodePage }*/, Matches = matches });
                     }
                 }
             }
