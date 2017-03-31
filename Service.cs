@@ -76,7 +76,7 @@ namespace Cliver.RamMonitor
         static Regex DumpRegex;
         static string EventUrl;
         static uint CheckPeriodInSecs;
-        static Encoding Encoding;
+        static readonly Encoding Encoding = System.Text.Encoding.Unicode;
 
         static void monitor()
         {
@@ -94,9 +94,9 @@ namespace Cliver.RamMonitor
             CheckPeriodInSecs = Settings.General.CheckPeriodInSecs;
             if (CheckPeriodInSecs < 60)
                 throw new Exception("CheckPeriodInSecs is < 60");
-            Encoding = System.Text.Encoding.GetEncoding(Settings.General.EncodingCodePage);
-            if (Encoding == null)
-                throw new Exception("Encoding is not specified.");
+            //Encoding = System.Text.Encoding.GetEncoding(Settings.General.EncodingCodePage);
+            //if (Encoding == null)
+            //    throw new Exception("Encoding is not specified.");
 
             while (monitor_t != null)
             {
@@ -175,7 +175,7 @@ namespace Cliver.RamMonitor
                     //if (matches.Count > 0)
                     {
                         Log.Main.Write("MATCHES:\r\n" + SerializationRoutines.Json.Serialize(matches));
-                        post(new { Process = process_name, Regex = DumpRegex, Encoding = Encoding, Matches = matches });
+                        post(new { Process = process_name, Regex = DumpRegex, Encoding = new { Name = Encoding.EncodingName, CodePage = Encoding.CodePage }, Matches = matches });
                     }
                 }
             }
@@ -204,6 +204,7 @@ namespace Cliver.RamMonitor
                 Log.Main.Inform("Posting to " + EventUrl);
 
                 HttpClient hc = new HttpClient();
+                var g = SerializationRoutines.Json.Serialize(data);
                 var post_data = new StringContent(SerializationRoutines.Json.Serialize(data), Encoding.UTF8, "application/json");
                 HttpResponseMessage rm = await hc.PostAsync(EventUrl, post_data);
                 if (!rm.IsSuccessStatusCode)

@@ -10,7 +10,7 @@ using System.Windows.Forms;
 
 namespace Cliver.RamMonitor
 {
-    public partial class SettingsForm : BaseForm// Form//
+    public partial class SettingsForm : Form//BaseForm// 
     {
         public SettingsForm()
         {
@@ -26,22 +26,34 @@ namespace Cliver.RamMonitor
             EventUrl.Text = Settings.General.EventUrl;
             CheckPeriodInSecs.Text = Settings.General.CheckPeriodInSecs.ToString();
 
-            Encoding.DisplayMember = "Text";
-            Encoding.ValueMember = "CodePage";
-            List<EncodingItem> its = new List<EncodingItem>();
-            foreach (EncodingInfo ei in System.Text.Encoding.GetEncodings())
-                its.Add(new EncodingItem { Text = ei.Name, CodePage = ei.GetEncoding().CodePage });
-            Encoding.Items.AddRange(its.ToArray());
-            EncodingItem si = its.Where(i => i.CodePage == Settings.General.EncodingCodePage).First();
-            if (si != null)
-                Encoding.SelectedIndex = its.IndexOf(si);
+            //Encoding.DisplayMember = "Text";
+            //Encoding.ValueMember = "CodePage";
+            //List<EncodingItem> its = new List<EncodingItem>();
+            //foreach (EncodingInfo ei in System.Text.Encoding.GetEncodings())
+            //    its.Add(new EncodingItem { Text = ei.Name, CodePage = ei.GetEncoding().CodePage });
+            //Encoding.Items.AddRange(its.ToArray());
+            //EncodingItem si = its.Where(i => i.CodePage == Settings.General.EncodingCodePage).First();
+            //if (si != null)
+            //    Encoding.SelectedIndex = its.IndexOf(si);
+            
+            foreach (System.Windows.Input.Key k in Enum.GetValues(typeof(System.Windows.Input.Key)))
+                TerminatingKey.Items.Add(k);
+            TerminatingKey.SelectedItem = Settings.General.TerminatingKey;
+            
+            foreach (System.Windows.Input.ModifierKeys k in Enum.GetValues(typeof(System.Windows.Input.ModifierKeys)))
+                TerminatingModifierKey1.Items.Add(k);
+            TerminatingModifierKey1.SelectedItem = Settings.General.TerminatingModifierKey1;
+            
+            foreach (System.Windows.Input.ModifierKeys k in Enum.GetValues(typeof(System.Windows.Input.ModifierKeys)))
+                TerminatingModifierKey2.Items.Add(k);
+            TerminatingModifierKey2.SelectedItem = Settings.General.TerminatingModifierKey2;
         }
 
-        public class EncodingItem
-        {
-            public string Text { get; set; }
-            public int CodePage { get; set; }
-        }
+        //public class EncodingItem
+        //{
+        //    public string Text { get; set; }
+        //    public int CodePage { get; set; }
+        //}
 
         static public void Open()
         {
@@ -65,8 +77,13 @@ namespace Cliver.RamMonitor
                 Settings.General.DumpRegex = new System.Text.RegularExpressions.Regex(DumpRegex.Text);
                 Settings.General.EventUrl = EventUrl.Text;
                 Settings.General.CheckPeriodInSecs = uint.Parse(CheckPeriodInSecs.Text);
-                Settings.General.EncodingCodePage = ((EncodingItem)Encoding.SelectedItem).CodePage;
+                //Settings.General.EncodingCodePage = ((EncodingItem)Encoding.SelectedItem).CodePage;
+                Settings.General.TerminatingKey = (System.Windows.Input.Key)TerminatingKey.SelectedItem;
+                Settings.General.TerminatingModifierKey1 = (System.Windows.Input.ModifierKeys)TerminatingModifierKey1.SelectedItem;
+                Settings.General.TerminatingModifierKey2 = (System.Windows.Input.ModifierKeys)TerminatingModifierKey2.SelectedItem;
                 Settings.General.Save();
+
+                Program.SetTerminatingKeys();
 
                 Close();
 

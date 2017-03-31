@@ -42,27 +42,47 @@ namespace Cliver.RamMonitor
                 Application.Exit();
             };
 
-            hotKeyManager = new HotKeyManager();
-            var hotKey = hotKeyManager.Register(Key.F1, ModifierKeys.Alt);
-            hotKeyManager.KeyPressed += delegate (object sender, KeyPressedEventArgs e)
+            Log.Initialize(Log.Mode.ONLY_LOG);
+            //Cliver.Config.Initialize(new string[] { "General" });
+            Cliver.Config.Reload();
+            SetTerminatingKeys();
+        }        
+
+        public static void SetTerminatingKeys()
+        {
+            if (key_manager != null)
             {
-                if (!Message.YesNo("Do you want to terminate " + ProgramRoutines.GetAppName() + "?"))
-                    return;
-                Log.Main.Exit2("Keys pressed.");
-            };
+                key_manager.Dispose();
+                key_manager = null;
+            }
+            if (Settings.General.TerminatingKey != System.Windows.Input.Key.None)
+            {
+                key_manager = new HotKeyManager();
+                System.Windows.Input.ModifierKeys mks;
+                if (Settings.General.TerminatingModifierKey1 != ModifierKeys.None)
+                {
+                    mks = Settings.General.TerminatingModifierKey1;
+                    if (Settings.General.TerminatingModifierKey2 != ModifierKeys.None)
+                        mks |= Settings.General.TerminatingModifierKey2;
+                }
+                else
+                    mks = ModifierKeys.None;
+                var hotKey = key_manager.Register(Settings.General.TerminatingKey, mks);
+                key_manager.KeyPressed += delegate (object sender, KeyPressedEventArgs e)
+                {
+                    if (!Message.YesNo("Do you want to terminate " + ProgramRoutines.GetAppName() + "?"))
+                        return;
+                    Log.Main.Exit2("Keys pressed.");
+                };
+            }
         }
-        
-        static readonly HotKeyManager hotKeyManager;
+        static HotKeyManager key_manager;
 
         [STAThread]
         public static void Main(string[] args)
         {
             try
             {
-                Log.Initialize(Log.Mode.ONLY_LOG);
-                //Cliver.Config.Initialize(new string[] { "General" });
-                Cliver.Config.Reload();
-
                 InternetDateTime.CHECK_TEST_PERIOD_VALIDITY(2017, 4, 11);
 
                 ProcessRoutines.RunSingleProcessOnly();
