@@ -49,15 +49,17 @@ namespace Cliver.RamMonitor
                 if (value)
                 {
                     if (monitor_t == null || !monitor_t.IsAlive)
+                    {
                         monitor_t = Cliver.ThreadRoutines.StartTry(
                             monitor,
                             null,
                             () =>
                             {
                                 monitor_t = null;
-                                StateChanged?.BeginInvoke(null, null);
+                                StateChanged?.Invoke();
                             }
                             );
+                    }
                 }
                 else
                 {
@@ -81,7 +83,7 @@ namespace Cliver.RamMonitor
 
         static void monitor()
         {
-            StateChanged?.BeginInvoke(null, null);
+            StateChanged?.Invoke();
 
             ProcessName = Settings.General.ProcessName;
             if (ProcessName == null)
@@ -146,6 +148,7 @@ namespace Cliver.RamMonitor
                     List<List<string>> matches = new List<List<string>>();
                     string text0 = "";
                     Win64.MEMORY_BASIC_INFORMATION mbi;
+                    //System.IO.StreamWriter sw = new System.IO.StreamWriter(@"ram.txt");
                     for (long address = process_min_address; address < process_max_address; address += mbi.RegionSize)
                     {
                         if (1 > Win64.VirtualQueryEx(ph, new IntPtr(address), out mbi, MEMORY_BASIC_INFORMATION_size))
@@ -160,9 +163,11 @@ namespace Cliver.RamMonitor
                         int bytes_count = 0;
                         if (!Win64.ReadProcessMemory((int)ph, mbi.BaseAddress, bs, mbi.RegionSize, ref bytes_count))
                             Log.Main.Error2("ReadProcessMemory failed:" + Win32Routines.GetLastErrorString());
-                        string text = text0 + Encoding.GetString(bs, 0, bytes_count);
+                        string text1 = Encoding.GetString(bs, 0, bytes_count);
+                        string text = text0 + text1;
                         int last_match_end;
                         parse(text, ref matches, out last_match_end);
+                        //sw.Write(text1 + "\r\n\r\n####################################\r\n\r\n");
                         int text0_length = BUFFER_PASS_SIZE;
                         if (last_match_end > 0)
                         {
@@ -172,6 +177,7 @@ namespace Cliver.RamMonitor
                         }
                         text0 = text.Substring(text.Length - text0_length);
                     }
+                    //sw.Close();
                     //if (matches.Count > 0)
                     {
                         Log.Main.Write("MATCHES:\r\n" + SerializationRoutines.Json.Serialize(matches));

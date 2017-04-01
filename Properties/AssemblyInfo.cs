@@ -5,12 +5,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Cliver.RamMonitor")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("RamMonitor")]
+[assembly: AssemblyDescription("RAM Monitor, by Sergey Stoyan, CliverSoft.com")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("CliverSoft.com")]
 [assembly: AssemblyProduct("RamMonitor")]
-[assembly: AssemblyCopyright("Copyright © 20017 CliverSoft.com")]
+[assembly: AssemblyCopyright("Copyright © 2017 CliverSoft.com")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

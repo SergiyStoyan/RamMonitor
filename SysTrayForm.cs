@@ -25,19 +25,13 @@ namespace Cliver.RamMonitor
             InitializeComponent();
 
             Service.StateChanged += delegate
-              {
-                  if (Service.Running)
+            {
+                this.Invoke(() => { StartStop.Checked = Service.Running; });
+                if (Service.Running)
                       notifyIcon.Icon = AssemblyRoutines.GetAppIcon();
                   else
-                      notifyIcon.Icon = Icon.FromHandle(ImageRoutines.GetGreyScale(notifyIcon.Icon.ToBitmap()).GetHicon());
+                      notifyIcon.Icon = Icon.FromHandle(ImageRoutines.GetGreyScale(AssemblyRoutines.GetAppIcon().ToBitmap()).GetHicon());
               };
-
-            RightClickMenu.Opening += RightClickMenu_Opening;
-        }
-
-        private void RightClickMenu_Opening(object sender, CancelEventArgs e)
-        {
-            StartStop.Checked = Service.Running;
         }
 
         public static readonly SysTray This = new SysTray();

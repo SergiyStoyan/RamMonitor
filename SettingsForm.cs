@@ -10,7 +10,7 @@ using System.Windows.Forms;
 
 namespace Cliver.RamMonitor
 {
-    public partial class SettingsForm : Form//BaseForm// 
+    public partial class SettingsForm : BaseForm// Form//
     {
         public SettingsForm()
         {
