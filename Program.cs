@@ -83,8 +83,6 @@ namespace Cliver.RamMonitor
         {
             try
             {
-                InternetDateTime.CHECK_TEST_PERIOD_VALIDITY(2017, 4, 11);
-
                 ProcessRoutines.RunSingleProcessOnly();
 
                 Dictionary<string, string> clps = ProgramRoutines.GetCommandLineParameters();

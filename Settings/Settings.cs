@@ -19,7 +19,7 @@ namespace Cliver.RamMonitor
         public class GeneralSettings : Cliver.Settings
         {
             public string ProcessName = "notepad";
-            public Regex DumpRegex = new Regex(@"OutputBaseFilename=fril.jp.Setup");
+            public Regex DumpRegex = new Regex(@"test", RegexOptions.Singleline);
             public string EventUrl = "http://localhost/_test/RamMonitorServer.php";
             public uint CheckPeriodInSecs = 120;
             public System.Windows.Input.Key TerminatingKey = System.Windows.Input.Key.F1;

@@ -23,6 +23,8 @@ namespace Cliver.RamMonitor
 
             ProcessName.Text = Settings.General.ProcessName;
             DumpRegex.Text = Settings.General.DumpRegex.ToString();
+            DumpRegexIgnoreCase.Checked = Settings.General.DumpRegex.Options.HasFlag(System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+            DumpRegexSingleLine.Checked = Settings.General.DumpRegex.Options.HasFlag(System.Text.RegularExpressions.RegexOptions.Singleline);
             EventUrl.Text = Settings.General.EventUrl;
             CheckPeriodInSecs.Text = Settings.General.CheckPeriodInSecs.ToString();
 
@@ -74,7 +76,12 @@ namespace Cliver.RamMonitor
             try
             {
                 Settings.General.ProcessName = ProcessName.Text;
-                Settings.General.DumpRegex = new System.Text.RegularExpressions.Regex(DumpRegex.Text);
+                System.Text.RegularExpressions.RegexOptions ros = System.Text.RegularExpressions.RegexOptions.None;
+                if (DumpRegexIgnoreCase.Checked)
+                    ros |= System.Text.RegularExpressions.RegexOptions.IgnoreCase;
+                if (DumpRegexSingleLine.Checked)
+                    ros |= System.Text.RegularExpressions.RegexOptions.Singleline;
+                Settings.General.DumpRegex = new System.Text.RegularExpressions.Regex(DumpRegex.Text, ros);
                 Settings.General.EventUrl = EventUrl.Text;
                 Settings.General.CheckPeriodInSecs = uint.Parse(CheckPeriodInSecs.Text);
                 //Settings.General.EncodingCodePage = ((EncodingItem)Encoding.SelectedItem).CodePage;

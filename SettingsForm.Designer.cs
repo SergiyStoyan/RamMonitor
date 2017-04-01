@@ -32,7 +32,6 @@
             this.label1 = new System.Windows.Forms.Label();
             this.ProcessName = new System.Windows.Forms.TextBox();
             this.DumpRegex = new System.Windows.Forms.TextBox();
-            this.label2 = new System.Windows.Forms.Label();
             this.EventUrl = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
             this.CheckPeriodInSecs = new System.Windows.Forms.TextBox();
@@ -45,13 +44,17 @@
             this.TerminatingModifierKey2 = new System.Windows.Forms.ComboBox();
             this.label7 = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.DumpRegexIgnoreCase = new System.Windows.Forms.CheckBox();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.DumpRegexSingleLine = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
+            this.groupBox2.SuspendLayout();
             this.SuspendLayout();
             // 
             // bOk
             // 
             this.bOk.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.bOk.Location = new System.Drawing.Point(116, 288);
+            this.bOk.Location = new System.Drawing.Point(116, 337);
             this.bOk.Name = "bOk";
             this.bOk.Size = new System.Drawing.Size(75, 23);
             this.bOk.TabIndex = 0;
@@ -64,9 +67,9 @@
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(9, 9);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(102, 13);
+            this.label1.Size = new System.Drawing.Size(171, 13);
             this.label1.TabIndex = 1;
-            this.label1.Text = "Process To Monitor:";
+            this.label1.Text = "Process Name (wildcards allowed):";
             // 
             // ProcessName
             // 
@@ -81,25 +84,16 @@
             // 
             this.DumpRegex.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.DumpRegex.Location = new System.Drawing.Point(12, 66);
+            this.DumpRegex.Location = new System.Drawing.Point(10, 19);
             this.DumpRegex.Name = "DumpRegex";
-            this.DumpRegex.Size = new System.Drawing.Size(260, 20);
+            this.DumpRegex.Size = new System.Drawing.Size(238, 20);
             this.DumpRegex.TabIndex = 4;
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(9, 50);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(41, 13);
-            this.label2.TabIndex = 3;
-            this.label2.Text = "Regex:";
             // 
             // EventUrl
             // 
             this.EventUrl.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.EventUrl.Location = new System.Drawing.Point(12, 109);
+            this.EventUrl.Location = new System.Drawing.Point(12, 159);
             this.EventUrl.Name = "EventUrl";
             this.EventUrl.Size = new System.Drawing.Size(260, 20);
             this.EventUrl.TabIndex = 6;
@@ -107,15 +101,15 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(9, 93);
+            this.label3.Location = new System.Drawing.Point(9, 143);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(54, 13);
+            this.label3.Size = new System.Drawing.Size(65, 13);
             this.label3.TabIndex = 5;
-            this.label3.Text = "Event Url:";
+            this.label3.Text = "Channel Url:";
             // 
             // CheckPeriodInSecs
             // 
-            this.CheckPeriodInSecs.Location = new System.Drawing.Point(12, 151);
+            this.CheckPeriodInSecs.Location = new System.Drawing.Point(12, 208);
             this.CheckPeriodInSecs.Name = "CheckPeriodInSecs";
             this.CheckPeriodInSecs.Size = new System.Drawing.Size(62, 20);
             this.CheckPeriodInSecs.TabIndex = 8;
@@ -123,7 +117,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(9, 135);
+            this.label4.Location = new System.Drawing.Point(9, 192);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(105, 13);
             this.label4.TabIndex = 7;
@@ -132,7 +126,7 @@
             // bCancel
             // 
             this.bCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.bCancel.Location = new System.Drawing.Point(197, 288);
+            this.bCancel.Location = new System.Drawing.Point(197, 337);
             this.bCancel.Name = "bCancel";
             this.bCancel.Size = new System.Drawing.Size(75, 23);
             this.bCancel.TabIndex = 9;
@@ -145,15 +139,15 @@
             this.TerminatingKey.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.TerminatingKey.FormattingEnabled = true;
-            this.TerminatingKey.Location = new System.Drawing.Point(12, 42);
+            this.TerminatingKey.Location = new System.Drawing.Point(10, 38);
             this.TerminatingKey.Name = "TerminatingKey";
-            this.TerminatingKey.Size = new System.Drawing.Size(61, 21);
+            this.TerminatingKey.Size = new System.Drawing.Size(75, 21);
             this.TerminatingKey.TabIndex = 11;
             // 
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(8, 26);
+            this.label5.Location = new System.Drawing.Point(10, 22);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(28, 13);
             this.label5.TabIndex = 10;
@@ -164,15 +158,15 @@
             this.TerminatingModifierKey1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.TerminatingModifierKey1.FormattingEnabled = true;
-            this.TerminatingModifierKey1.Location = new System.Drawing.Point(93, 42);
+            this.TerminatingModifierKey1.Location = new System.Drawing.Point(91, 38);
             this.TerminatingModifierKey1.Name = "TerminatingModifierKey1";
-            this.TerminatingModifierKey1.Size = new System.Drawing.Size(61, 21);
+            this.TerminatingModifierKey1.Size = new System.Drawing.Size(75, 21);
             this.TerminatingModifierKey1.TabIndex = 13;
             // 
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(89, 26);
+            this.label6.Location = new System.Drawing.Point(92, 22);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(74, 13);
             this.label6.TabIndex = 12;
@@ -183,15 +177,15 @@
             this.TerminatingModifierKey2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.TerminatingModifierKey2.FormattingEnabled = true;
-            this.TerminatingModifierKey2.Location = new System.Drawing.Point(175, 42);
+            this.TerminatingModifierKey2.Location = new System.Drawing.Point(173, 38);
             this.TerminatingModifierKey2.Name = "TerminatingModifierKey2";
-            this.TerminatingModifierKey2.Size = new System.Drawing.Size(61, 21);
+            this.TerminatingModifierKey2.Size = new System.Drawing.Size(75, 21);
             this.TerminatingModifierKey2.TabIndex = 15;
             // 
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(171, 26);
+            this.label7.Location = new System.Drawing.Point(174, 22);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(74, 13);
             this.label7.TabIndex = 14;
@@ -205,26 +199,57 @@
             this.groupBox1.Controls.Add(this.TerminatingKey);
             this.groupBox1.Controls.Add(this.label7);
             this.groupBox1.Controls.Add(this.label6);
-            this.groupBox1.Location = new System.Drawing.Point(12, 186);
+            this.groupBox1.Location = new System.Drawing.Point(12, 246);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(258, 77);
+            this.groupBox1.Size = new System.Drawing.Size(258, 69);
             this.groupBox1.TabIndex = 17;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Terminating Key Combination";
+            // 
+            // DumpRegexIgnoreCase
+            // 
+            this.DumpRegexIgnoreCase.AutoSize = true;
+            this.DumpRegexIgnoreCase.Location = new System.Drawing.Point(10, 45);
+            this.DumpRegexIgnoreCase.Name = "DumpRegexIgnoreCase";
+            this.DumpRegexIgnoreCase.Size = new System.Drawing.Size(83, 17);
+            this.DumpRegexIgnoreCase.TabIndex = 18;
+            this.DumpRegexIgnoreCase.Text = "Ignore Case";
+            this.DumpRegexIgnoreCase.UseVisualStyleBackColor = true;
+            // 
+            // groupBox2
+            // 
+            this.groupBox2.Controls.Add(this.DumpRegexSingleLine);
+            this.groupBox2.Controls.Add(this.DumpRegexIgnoreCase);
+            this.groupBox2.Controls.Add(this.DumpRegex);
+            this.groupBox2.Location = new System.Drawing.Point(12, 58);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(258, 72);
+            this.groupBox2.TabIndex = 19;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "Regex";
+            // 
+            // DumpRegexSingleLine
+            // 
+            this.DumpRegexSingleLine.AutoSize = true;
+            this.DumpRegexSingleLine.Location = new System.Drawing.Point(95, 45);
+            this.DumpRegexSingleLine.Name = "DumpRegexSingleLine";
+            this.DumpRegexSingleLine.Size = new System.Drawing.Size(78, 17);
+            this.DumpRegexSingleLine.TabIndex = 19;
+            this.DumpRegexSingleLine.Text = "Single Line";
+            this.DumpRegexSingleLine.UseVisualStyleBackColor = true;
             // 
             // SettingsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(284, 323);
+            this.ClientSize = new System.Drawing.Size(284, 372);
+            this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.bCancel);
             this.Controls.Add(this.CheckPeriodInSecs);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.EventUrl);
             this.Controls.Add(this.label3);
-            this.Controls.Add(this.DumpRegex);
-            this.Controls.Add(this.label2);
             this.Controls.Add(this.ProcessName);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.bOk);
@@ -232,6 +257,8 @@
             this.Text = "Settings";
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
+            this.groupBox2.ResumeLayout(false);
+            this.groupBox2.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -243,7 +270,6 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox ProcessName;
         private System.Windows.Forms.TextBox DumpRegex;
-        private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox EventUrl;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox CheckPeriodInSecs;
@@ -256,5 +282,8 @@
         private System.Windows.Forms.ComboBox TerminatingModifierKey2;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.CheckBox DumpRegexIgnoreCase;
+        private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.CheckBox DumpRegexSingleLine;
     }
 }

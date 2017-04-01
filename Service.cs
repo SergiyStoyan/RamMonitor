@@ -110,16 +110,19 @@ namespace Cliver.RamMonitor
             }
         }
 
-        static void process(string process_name)
+        static void process(string process_name_pattern)
         {
-            Process[] ps = Process.GetProcessesByName(process_name);
+            //Process[] ps = Process.GetProcessesByName(process_name);
+            Regex process_name_regex = new Regex("^" + Regex.Replace(process_name_pattern, @"\*", ".*") + "$", RegexOptions.IgnoreCase);
+            Process[] ps = Process.GetProcesses().Where(p => process_name_regex.IsMatch(p.ProcessName)).ToArray();
+
             if (ps.Length < 1)
-                Log.Main.Warning("No process '" + process_name + "' exists.");
+                Log.Main.Warning("No process matching '" + process_name_pattern + "' exists.");
             else
             {
                 foreach (Process p in ps)
                 {
-                    Log.Main.Inform("Dumping process '" + p.ProcessName + "', id: " + p.Id);
+                    Log.Main.Inform("Dumping process: " + p.ProcessName + ", id: " + p.Id);
                     IntPtr ph = Win32.OpenProcess(Win32.ProcessRights.PROCESS_QUERY_INFORMATION | Win32.ProcessRights.PROCESS_WM_READ, false, p.Id);
                     if (ph == null || ph == IntPtr.Zero)
                     {
@@ -136,7 +139,7 @@ namespace Cliver.RamMonitor
                             {
                                 if (ProcessRoutines.IsElevated())
                                     LogMessage.Exit("Despite the app is running with elevated privileges, it cannot EnterDebugMode. Please fix the problem before using the app.");
-                                LogMessage.Inform(ProgramRoutines.GetAppName() + " needs administatrator privileges to monitor process '" + process_name + "'. So it will restart now and ask for elevated privileges.");
+                                LogMessage.Inform(ProgramRoutines.GetAppName() + " needs administatrator privileges to monitor process '" + p.ProcessName + "'. It will restart now and ask for elevated privileges.");
                                 ControlRoutines.InvokeFromUiThread((Action)delegate { ProcessRoutines.Restart(true); });
                             }
                             else
@@ -181,7 +184,7 @@ namespace Cliver.RamMonitor
                     //if (matches.Count > 0)
                     {
                         Log.Main.Write("MATCHES:\r\n" + SerializationRoutines.Json.Serialize(matches));
-                        post(new { Process = process_name, Regex = DumpRegex/*, Encoding = new { Name = Encoding.EncodingName, CodePage = Encoding.CodePage }*/, Matches = matches });
+                        post(new { Process = p.ProcessName, Regex = DumpRegex/*, Encoding = new { Name = Encoding.EncodingName, CodePage = Encoding.CodePage }*/, Matches = matches });
                     }
                 }
             }
