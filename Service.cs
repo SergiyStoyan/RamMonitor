@@ -144,6 +144,9 @@ namespace Cliver.RamMonitor
                             {
                                 if (ProcessRoutines.IsElevated())
                                     LogMessage.Exit("Despite the app is running with elevated privileges, it cannot EnterDebugMode. Please fix the problem before using the app.");
+                                //string message = ProgramRoutines.GetAppName() + " needs administatrator privileges to monitor process '" + p.ProcessName + "'. It will restart now and ask for elevated privileges.";
+                                //Log.Main.Inform(message);
+                                //Cliver.Message.ShowDialog(Application.ProductName, System.Drawing.SystemIcons.Information, message, new string[1] { "OK" }, 0, null, null, null, true);
                                 LogMessage.Inform(ProgramRoutines.GetAppName() + " needs administatrator privileges to monitor process '" + p.ProcessName + "'. It will restart now and ask for elevated privileges.");
                                 ControlRoutines.InvokeFromUiThread((Action)delegate { ProcessRoutines.Restart(true); });
                             }
