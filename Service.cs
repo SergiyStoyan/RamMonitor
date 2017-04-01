@@ -32,11 +32,11 @@ namespace Cliver.RamMonitor
         {
             Win32.SYSTEM_INFO si;
             Win32.GetSystemInfo(out si);
-            process_min_address = (long)si.minimumApplicationAddress;
-            process_max_address = (long)si.maximumApplicationAddress;
+            process_min_address = (ulong)si.minimumApplicationAddress;
+            process_max_address = (ulong)si.maximumApplicationAddress;
         }
-        static readonly long process_min_address;
-        static readonly long process_max_address;
+        static readonly ulong process_min_address;
+        static readonly ulong process_max_address;
         static readonly uint MEMORY_BASIC_INFORMATION_size = (uint)System.Runtime.InteropServices.Marshal.SizeOf(typeof(Win64.MEMORY_BASIC_INFORMATION));
 
         public delegate void OnStateChanged();
@@ -64,8 +64,13 @@ namespace Cliver.RamMonitor
                 else
                 {
                     if (monitor_t != null && monitor_t.IsAlive)
-                        monitor_t.Abort();
-                    monitor_t = null;
+                    {
+                        Thread exiting_monitor_t = monitor_t;
+                        monitor_t = null;
+                        //exiting_monitor_t.Join();
+                        while (exiting_monitor_t.IsAlive)
+                            Application.DoEvents();
+                    }
                 }
             }
             get
@@ -105,8 +110,8 @@ namespace Cliver.RamMonitor
             {
                 DateTime next_check_time = DateTime.Now.AddSeconds(CheckPeriodInSecs);
                 process(ProcessName);
-                if (next_check_time > DateTime.Now)
-                    Thread.Sleep(next_check_time - DateTime.Now);
+                while (monitor_t != null && next_check_time > DateTime.Now)
+                    Thread.Sleep(100);
             }
         }
 
@@ -152,10 +157,17 @@ namespace Cliver.RamMonitor
                     string text0 = "";
                     Win64.MEMORY_BASIC_INFORMATION mbi;
                     //System.IO.StreamWriter sw = new System.IO.StreamWriter(@"ram.txt");
-                    for (long address = process_min_address; address < process_max_address; address += mbi.RegionSize)
+                    for (ulong address = process_min_address; address < process_max_address; address = mbi.BaseAddress + mbi.RegionSize)
                     {
-                        if (1 > Win64.VirtualQueryEx(ph, new IntPtr(address), out mbi, MEMORY_BASIC_INFORMATION_size))
-                            throw new Exception("VirtualQueryEx failed:" + Win32Routines.GetLastErrorString());
+                        if (monitor_t == null)
+                            return;
+
+                        if (1 > Win64.VirtualQueryEx(ph, new UIntPtr(address), out mbi, MEMORY_BASIC_INFORMATION_size))
+                        {
+                            //throw new Exception("VirtualQueryEx failed:" + Win32Routines.GetLastErrorMessage());
+                            Log.Main.Error2("VirtualQueryEx failed:" + Win32Routines.GetLastErrorMessage());
+                            break;
+                        }
                         if ((mbi.State & Win32.MemoryState.MEM_COMMIT) != Win32.MemoryState.MEM_COMMIT)
                             continue;
                         if ((mbi.Protect & Win32.MemoryProtection.PAGE_NOACCESS) == Win32.MemoryProtection.PAGE_NOACCESS)
@@ -165,20 +177,24 @@ namespace Cliver.RamMonitor
                         byte[] bs = new byte[mbi.RegionSize];
                         int bytes_count = 0;
                         if (!Win64.ReadProcessMemory((int)ph, mbi.BaseAddress, bs, mbi.RegionSize, ref bytes_count))
-                            Log.Main.Error2("ReadProcessMemory failed:" + Win32Routines.GetLastErrorString());
+                            Log.Main.Error2("ReadProcessMemory failed:" + Win32Routines.GetLastErrorMessage());
                         string text1 = Encoding.GetString(bs, 0, bytes_count);
-                        string text = text0 + text1;
                         int last_match_end;
-                        parse(text, ref matches, out last_match_end);
+                        parse(text0 + text1, ref matches, out last_match_end);
                         //sw.Write(text1 + "\r\n\r\n####################################\r\n\r\n");
                         int text0_length = BUFFER_PASS_SIZE;
                         if (last_match_end > 0)
                         {
-                            text0_length = text.Length - last_match_end;
+                            text0_length = text1.Length - last_match_end;
                             if (text0_length > BUFFER_PASS_SIZE)
                                 text0_length = BUFFER_PASS_SIZE;
+                            else if (text0_length < 0)
+                                text0_length = 0;
                         }
-                        text0 = text.Substring(text.Length - text0_length);
+                        if (text1.Length > text0_length)
+                            text0 = text1.Substring(text1.Length - text0_length);
+                        else
+                            text0 = "";
                     }
                     //sw.Close();
                     //if (matches.Count > 0)

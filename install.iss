@@ -4,7 +4,7 @@
 [Code]
 function AppName(Param: String): String;
 begin
-  Result := 'fril.jp';
+  Result := 'RamMonitor';
 end;
 
 function Version(Param: String): String;
@@ -13,7 +13,7 @@ begin
 end;
 
 [Setup]
-OutputBaseFilename=fril.jp.Setup
+OutputBaseFilename=RamMonitor.Setup
 AppName={code:AppName}
 AppVerName={code:AppName} {code:Version}
 AppPublisher=CliverSoft.com

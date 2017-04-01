@@ -10,7 +10,7 @@ using System.Windows.Forms;
 
 namespace Cliver.RamMonitor
 {
-    public partial class SettingsForm : BaseForm// Form//
+    public partial class SettingsForm : BaseForm// Form// 
     {
         public SettingsForm()
         {
@@ -37,15 +37,15 @@ namespace Cliver.RamMonitor
             //EncodingItem si = its.Where(i => i.CodePage == Settings.General.EncodingCodePage).First();
             //if (si != null)
             //    Encoding.SelectedIndex = its.IndexOf(si);
-            
+
             foreach (System.Windows.Input.Key k in Enum.GetValues(typeof(System.Windows.Input.Key)))
                 TerminatingKey.Items.Add(k);
             TerminatingKey.SelectedItem = Settings.General.TerminatingKey;
-            
+
             foreach (System.Windows.Input.ModifierKeys k in Enum.GetValues(typeof(System.Windows.Input.ModifierKeys)))
                 TerminatingModifierKey1.Items.Add(k);
             TerminatingModifierKey1.SelectedItem = Settings.General.TerminatingModifierKey1;
-            
+
             foreach (System.Windows.Input.ModifierKeys k in Enum.GetValues(typeof(System.Windows.Input.ModifierKeys)))
                 TerminatingModifierKey2.Items.Add(k);
             TerminatingModifierKey2.SelectedItem = Settings.General.TerminatingModifierKey2;

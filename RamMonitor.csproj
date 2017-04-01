@@ -136,7 +136,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="3RINGS~1.ICO" />
-    <Content Include="computers308.ico" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\CLIVER\CliverBot\CliverRoutines\CliverRoutines.csproj">
