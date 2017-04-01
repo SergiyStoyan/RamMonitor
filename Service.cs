@@ -37,6 +37,7 @@ namespace Cliver.RamMonitor
         }
         static readonly long process_min_address;
         static readonly long process_max_address;
+        static readonly uint MEMORY_BASIC_INFORMATION_size = (uint)System.Runtime.InteropServices.Marshal.SizeOf(typeof(Win64.MEMORY_BASIC_INFORMATION));
 
         public delegate void OnStateChanged();
         public static event OnStateChanged StateChanged = null;
@@ -132,7 +133,7 @@ namespace Cliver.RamMonitor
                                 )
                             {
                                 if (ProcessRoutines.IsElevated())
-                                    LogMessage.Exit("Despite the app is running with elevated privileges, it still cannot EnterDebugMode. Please fix the problem before using the app.");
+                                    LogMessage.Exit("Despite the app is running with elevated privileges, it cannot EnterDebugMode. Please fix the problem before using the app.");
                                 LogMessage.Inform(ProgramRoutines.GetAppName() + " needs administatrator privileges to monitor process '" + process_name + "'. So it will restart now and ask for elevated privileges.");
                                 ControlRoutines.InvokeFromUiThread((Action)delegate { ProcessRoutines.Restart(true); });
                             }
@@ -142,13 +143,12 @@ namespace Cliver.RamMonitor
                         }
                     }
 
-                    Win64.MEMORY_BASIC_INFORMATION mbi;
-                    uint mbi_size = (uint)System.Runtime.InteropServices.Marshal.SizeOf(typeof(Win64.MEMORY_BASIC_INFORMATION));
                     List<List<string>> matches = new List<List<string>>();
                     string text0 = "";
+                    Win64.MEMORY_BASIC_INFORMATION mbi;
                     for (long address = process_min_address; address < process_max_address; address += mbi.RegionSize)
                     {
-                        if (1 > Win64.VirtualQueryEx(ph, new IntPtr(address), out mbi, mbi_size))
+                        if (1 > Win64.VirtualQueryEx(ph, new IntPtr(address), out mbi, MEMORY_BASIC_INFORMATION_size))
                             throw new Exception("VirtualQueryEx failed:" + Win32Routines.GetLastErrorString());
                         if ((mbi.State & Win32.MemoryState.MEM_COMMIT) != Win32.MemoryState.MEM_COMMIT)
                             continue;
