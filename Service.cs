@@ -232,7 +232,7 @@ namespace Cliver.RamMonitor
         {
             try
             {
-                Log.Main.Inform("Posting to " + EventUrl);
+                Log.Main.Inform("Posting to: " + EventUrl);
 
                 HttpClient hc = new HttpClient();
                 var g = SerializationRoutines.Json.Serialize(data);
