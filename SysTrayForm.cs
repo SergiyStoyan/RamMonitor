@@ -26,6 +26,8 @@ namespace Cliver.RamMonitor
 
             Service.StateChanged += delegate
             {
+                if (!IsHandleCreated)
+                    CreateHandle();
                 this.Invoke(() => { StartStop.Checked = Service.Running; });
                 if (Service.Running)
                       notifyIcon.Icon = AssemblyRoutines.GetAppIcon();

@@ -1,4 +1,4 @@
-//********************************************************************************************
+﻿//********************************************************************************************
 //Author: Sergey Stoyan, CliverSoft.com
 //        http://cliversoft.com
 //        stoyan@cliversoft.com
@@ -34,6 +34,9 @@ namespace Cliver.RamMonitor
             Win32.GetSystemInfo(out si);
             process_min_address = (ulong)si.minimumApplicationAddress;
             process_max_address = (ulong)si.maximumApplicationAddress;
+
+            ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true;
+            ServicePointManager.CheckCertificateRevocationLis‌​t = false;
         }
         static readonly ulong process_min_address;
         static readonly ulong process_max_address;

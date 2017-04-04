@@ -7,8 +7,9 @@
 //file_put_contents("RamMonitorLog2.txt", $req_dump);
 $header = print_r(apache_request_headers(), true);
 $body = file_get_contents('php://input');
-file_put_contents("RamMonitorLog3.txt", "$header\r\n\r\n$body");
+file_put_contents("RamMonitorLog1.txt", "$header\r\n\r\n$body");
 
-
+$obj = json_decode($body);
+file_put_contents("RamMonitorLog2.txt", print_r($obj, true));
 
 ?>
